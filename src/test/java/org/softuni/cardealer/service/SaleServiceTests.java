@@ -61,44 +61,36 @@ public class SaleServiceTests {
         SupplierServiceModel supplier = new SupplierServiceModel();
         supplier.setName("Ivan");
         supplier.setImporter(true);
-        supplier = this.supplierService.saveSupplier(supplier);
 
-        List<PartServiceModel> parts = new ArrayList<>();
         PartServiceModel part = new PartServiceModel();
         part.setName("door");
         part.setPrice(BigDecimal.TEN);
-        part.setSupplier(supplier);
-        part = this.partService.savePart(part);
-        parts.add(part);
+        part.setSupplier(this.supplierService.saveSupplier(supplier));
+
+        List<PartServiceModel> parts = new ArrayList<>();
+        parts.add(this.partService.savePart(part));
 
         CarServiceModel car = new CarServiceModel();
         car.setMake("Lada");
         car.setModel("2101");
         car.setTravelledDistance(123L);
         car.setParts(parts);
-        car = this.carService.saveCar(car);
+        this.carService.saveCar(car);
 
         CustomerServiceModel customer = new CustomerServiceModel();
-        LocalDate birthDate = LocalDate.parse("1999-08-20", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         customer.setName("George");
-        customer.setBirthDate(birthDate);
+        customer.setBirthDate(LocalDate.parse("2000-08-20", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         customer.setYoungDriver(true);
-        customer = this.customerService.saveCustomer(customer);
-
+        this.customerService.saveCustomer(customer);
 
         CarSaleServiceModel carForSale = this.modelMapper.map(this.carRepository.findAll().get(0), CarSaleServiceModel.class);
         carForSale.setDiscount(10.0);
         carForSale.setCustomer(this.modelMapper.map(this.customerRepository.findAll().get(0), CustomerServiceModel.class));
 
-
         CarSaleServiceModel actual = this.saleService.saleCar(this.modelMapper.map(carForSale, CarSaleServiceModel.class));
-
-
         CarSaleServiceModel expected = this.modelMapper.map(this.carSaleRepository.findAll().get(0), CarSaleServiceModel.class);
 
         Assert.assertEquals(expected.getCar().getId(), actual.getCar().getId());
-
-
     }
 
 
