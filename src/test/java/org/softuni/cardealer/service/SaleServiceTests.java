@@ -57,7 +57,6 @@ public class SaleServiceTests {
         this.customerService = new CustomerServiceImpl(this.customerRepository, this.modelMapper);
         this.partService = new PartServiceImpl(this.partRepository, this.modelMapper);
         this.supplierService = new SupplierServiceImpl(this.supplierRepository, this.modelMapper);
-
     }
 
     @Test
@@ -66,25 +65,10 @@ public class SaleServiceTests {
         supplier.setName("Ivan");
         supplier.setImporter(true);
 
-
-//        supplier.setId("abc");
-//        SupplierRepository mockedRepo = Mockito.mock(SupplierRepository.class);
-
-//        when(mockedRepo.saveAndFlush(this.modelMapper.map(supplier, Supplier.class))).thenReturn({
-//                supplier.setName("Ivan");
-//                supplier.setImporter(true);
-//        });
-
-
         PartServiceModel part = new PartServiceModel();
         part.setName("door");
         part.setPrice(BigDecimal.TEN);
-
-
-        part.setSupplier(null); // this also work
-        part.setSupplier(this.supplierService.saveSupplier(supplier));
-
-
+        part.setSupplier(supplierService.saveSupplier(supplier));
         List<PartServiceModel> parts = new ArrayList<>();
         parts.add(this.partService.savePart(part));
 
