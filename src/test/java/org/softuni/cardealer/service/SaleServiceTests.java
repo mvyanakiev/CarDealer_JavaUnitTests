@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
+import org.softuni.cardealer.domain.entities.Supplier;
 import org.softuni.cardealer.domain.models.service.*;
 import org.softuni.cardealer.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,10 +66,24 @@ public class SaleServiceTests {
         supplier.setName("Ivan");
         supplier.setImporter(true);
 
+
+//        supplier.setId("abc");
+//        SupplierRepository mockedRepo = Mockito.mock(SupplierRepository.class);
+
+//        when(mockedRepo.saveAndFlush(this.modelMapper.map(supplier, Supplier.class))).thenReturn({
+//                supplier.setName("Ivan");
+//                supplier.setImporter(true);
+//        });
+
+
         PartServiceModel part = new PartServiceModel();
         part.setName("door");
         part.setPrice(BigDecimal.TEN);
+
+
+        part.setSupplier(null); // this also work
         part.setSupplier(this.supplierService.saveSupplier(supplier));
+
 
         List<PartServiceModel> parts = new ArrayList<>();
         parts.add(this.partService.savePart(part));
